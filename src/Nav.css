@@ -1,0 +1,46 @@
+.navbar {
+    margin: 0;
+    padding: 0;
+    opacity: 100%;
+    font-size: 18px;
+    background-color: black;
+}
+  
+.navi {
+    display: flex;
+    justify-content:center;
+    flex-wrap: wrap;
+    height: 80px;
+    align-items: center;
+}
+
+.list {
+    color: #f5ab99;
+    padding: 0px 20px;
+    list-style-type: none;
+}
+
+.unselectedPage {
+    text-decoration: none;
+    color:#f5ab99;
+    opacity:0.8;
+    transition: 0.7s all;
+}
+
+.selectedPage {
+    color:#f5ab99;
+    text-decoration:underline;
+    text-decoration-color: antiquewhite;
+    text-decoration-thickness: 2px;
+    opacity: 1;
+    transition: 0.7s all;
+}
+
+.selectedPage:hover,.unselectedPage:hover {
+    font-size:25px;
+    font-family:cursive;
+    opacity: 1;
+    background: rgb(55, 58, 53);
+    border-radius:10px;
+    padding: 10px 10px 10px 10px;
+}

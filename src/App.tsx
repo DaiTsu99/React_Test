@@ -1,26 +1,26 @@
 import React from 'react';
 import logo from './logo.svg';
+import {BrowserRouter, Routes,Route, Navigate } from "react-router-dom"
+import Nav from './Nav'
+import Homepage from './Components/Homepage'
+import JSONPost from './Components/JSONPost'
 import './App.css';
 
-function App() {
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      
+      <BrowserRouter> 
+      <Nav/>
+      <Routes>
+        <Route path="/Home" element={<Homepage/>} />
+        <Route path="/" element={<Navigate replace to="/Home" />} />
+        <Route path="/Post" element={<JSONPost/>} />
+      </Routes>
+      </BrowserRouter>
     </div>
-  );
+  )
 }
 
 export default App;
