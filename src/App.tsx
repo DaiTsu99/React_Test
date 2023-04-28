@@ -4,6 +4,7 @@ import {BrowserRouter, Routes,Route, Navigate } from "react-router-dom"
 import Nav from './Nav'
 import Homepage from './Components/Homepage'
 import JSONPost from './Components/JSONPost'
+import Weather from './Components/WeatherMaster'
 import './App.css';
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/Home" element={<Homepage/>} />
         <Route path="/" element={<Navigate replace to="/Home" />} />
         <Route path="/Post" element={<JSONPost/>} />
+        <Route path="/Weather" element={<Weather/>} />
       </Routes>
       </BrowserRouter>
     </div>
