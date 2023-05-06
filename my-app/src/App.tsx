@@ -5,6 +5,7 @@ import Nav from './Nav'
 import Homepage from './Components/Homepage'
 import JSONPost from './Components/JSONPost'
 import Weather from './Components/WeatherMaster'
+import GoREST from './Components/GoREST'
 import './App.css';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/" element={<Navigate replace to="/Home" />} />
         <Route path="/Post" element={<JSONPost/>} />
         <Route path="/Weather" element={<Weather/>} />
+        <Route path="/GoREST" element={<GoREST/>} />
       </Routes>
       </BrowserRouter>
     </div>

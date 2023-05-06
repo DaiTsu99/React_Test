@@ -6,14 +6,9 @@ import {
     Sequelize, InferAttributes, InferCreationAttributes, CreationOptional, NonAttribute, ForeignKey,
   } from 'sequelize';
 
-  
-const sequelize = new Sequelize('my_app', 'root', '', {
-    dialect: 'mysql',
-    host: 'localhost', 
-    port: 3308
-});
+import sequelize from '../database';
 
-const Post = sequelize.define('post', {
+const Test = sequelize.define('test', {
     id: {
        type: DataTypes.INTEGER.UNSIGNED,
        autoIncrement: true,
@@ -24,6 +19,4 @@ const Post = sequelize.define('post', {
        type: DataTypes.STRING,
     },
  });
-
-
-export default sequelize;
+ export default Test;

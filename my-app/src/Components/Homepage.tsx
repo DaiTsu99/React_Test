@@ -6,6 +6,8 @@ import Service from "../Services/Service";
 import ViewPosts from "./ViewPosts"
 import styles from '../Styles'
 
+//^ Using TypeScript to connect to Database
+
 const HomePage = () => {
 
     const [text, setText] = useState<string>();
@@ -68,9 +70,9 @@ const HomePage = () => {
   return (
     hasLoaded ? (
     <div className="flex justify-center">
-      <div className="container m-5 drop-shadow bg-blue-200 h-screen p-4" style={{ width: "800px" }}>
-      <div className="text-black text-2xl font-bold">HomePage</div>
-      <div className="mt-5">{text}</div>
+      <div className="container m-5 drop-shadow bg-sky-400 h-screen p-4" style={{ width: "800px" }}>
+      <div className="text-black text-2xl font-bold font-serif">HomePage</div>
+      <div className="mt-5 bg-lime-200 p-4 w-fit">From /api/data:  {text}</div>
       <div className="mt-10">
 
         <div className="flex flex-row">

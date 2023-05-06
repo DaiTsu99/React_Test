@@ -19,6 +19,18 @@ const Nav = () => {
                         }>JSONPost
                         </NavLink>
                     </li>
+                    <li className="list">
+                        <NavLink to="/Weather" className={isActive =>
+                            !isActive.isActive ? "unselectedPage" : "selectedPage"
+                        }>Weather
+                        </NavLink>
+                    </li>
+                    <li className="list">
+                        <NavLink to="/GoRest" className={isActive =>
+                            !isActive.isActive ? "unselectedPage" : "selectedPage"
+                        }>GoRest API
+                        </NavLink>
+                    </li>
                 </ul>
         </div>
     );
