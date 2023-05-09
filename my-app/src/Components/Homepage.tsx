@@ -69,8 +69,8 @@ const HomePage = () => {
 
   return (
     hasLoaded ? (
-    <div className="flex justify-center">
-      <div className="container m-5 drop-shadow bg-sky-400 h-screen p-4" style={{ width: "800px" }}>
+    <div className="flex justify-center bg-sky-200">
+      <div className="container m-5 drop-shadow-md bg-gradient-to-br from-zinc-100 from-10% via-sky-500 via-50% to-white to-80% h-screen p-4 w-3/4" /*style={{ width: "800px" }}*/>
       <div className="text-black text-2xl font-bold font-serif">HomePage</div>
       <div className="mt-5 bg-lime-200 p-4 w-fit">From /api/data:  {text}</div>
       <div className="mt-10">
@@ -84,7 +84,7 @@ const HomePage = () => {
       
         
       <button type='button'  className="basis-1/4 m-2 p-4 hover:scale-100 scale-90 text-xl
-                                        rounded-md bg-zinc-100 hover:bg-white duration-700 ease-in-out" 
+                                        rounded-md bg-zinc-300 hover:bg-white duration-700 ease-in-out" 
                             onClick={e => handleClick()}>Post</button>      
         </div>
         

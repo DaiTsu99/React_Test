@@ -37,7 +37,7 @@ const WeatherDataDisplay = ({weatherData,language}:{weatherData:any, language:an
     
     return(
     <div className="h-screen flex justify-center items-center">
-        <div className="w-3/4 h-fit bg-green-800 drop-shadow-md rounded-xl p-2">
+        <div className="w-3/4 h-fit bg-gradient-to-b from-lime-400 from-20% to-green-800 to-80% drop-shadow-md rounded-xl p-2">
             <div className="flex flex-row justify-between">
                 <div className="font-extralight text-xl text-white flex flex-row items-end">{language=="en" ? "City Name" : (language=="ja"? "市名":"")}<div className="ml-4 text-4xl">{weatherData.name}</div></div>
                 <button onClick={refresh} >

@@ -73,7 +73,7 @@ const WeatherMaster = () => {
     //   };
 
      return (
-      <div className="bg-sky-400">
+      <div className="bg-gradient-to-br from-white from-15% via-blue-400 via-50% to-sky-600 to-80%">
         {hasLoaded ? (
           <div>
             <div className="flex flex-row gap-x-4 justify-end drop-shadow-md">

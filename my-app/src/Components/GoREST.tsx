@@ -3,7 +3,7 @@ import { Alert, Pressable, View, Text, StyleSheet, Modal } from 'react-native';
 import axios from 'axios';
 
 import GoRESTPost from './GoRESTPost'
-import Service from '../Services/Service'
+import Service from "../Services/GoRESTService";
 import styles from '../Styles'
 
 //^ Connecting to API Requiring Bearer Access_Token
@@ -128,11 +128,11 @@ const GoREST = () => {
 
   return (
     
-      <div>
+      <div className="bg-gradient-to-br from-zinc-200 from-10% via-sky-400 via-50% to-white to-80%">
         {/* <button onClick={e=>console.log(postText)}>Test</button> */}
-        <div className="text-center font-bold m-4">GoREST API with Bearer Access_Token</div>
+        <div className="text-center font-bold p-4">GoREST API with Bearer Access_Token</div>
         {data1.map((item:any) => {
-          return(<div key={item.id} className="m-2 p-4 bg-lime-400 rounded-lg drop-shadow-md">
+          return(<div key={item.id} className="m-2 p-4 bg-gradient-to-tl from-zinc-200 from-10% via-lime-400 via-50% to-white to-80% rounded-lg drop-shadow-md">
 
             <div className="text-purple-700 m-2">
               User Name: {item.name}
@@ -148,7 +148,7 @@ const GoREST = () => {
                   placeholder="Enter your post title here"
                   required/>
 
-                <input className='border border-gray-200 p-2 w-full rounded duration-700 ease-in-out'
+                <textarea className='border border-gray-200 p-2 w-full rounded duration-700 ease-in-out'
                   name="postText" id="postText" onChange={e => handleChangeText(item.id, e.target.value)}
                   value={postText![item.id].text}
                   placeholder="Enter your message here"

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Alert, Pressable, View, Text, StyleSheet, Modal } from 'react-native';
-import Service from "../Services/Service";
+import Service from "../Services/GoRESTService";
 
 import styles from '../Styles'
 import Paginate from '../Paginate';
 import { error } from "console";
+import GoRESTUpdate from "./GoRESTUpdate";
 
 const GoRESTPost = (currUser:any) => {
-    
     
     const [postInfos, setPostInfos] = useState<{id:number, title:string, body:string}[]>([]);
     const [message, setMessage] = useState<string>("");
@@ -22,12 +22,30 @@ const GoRESTPost = (currUser:any) => {
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = postInfos.slice(indexOfFirstPost, indexOfLastPost);
 
+    const [hide, setHidden] = useState<{[key:string]:boolean}>();
+    // const [postId, setPostId] = useState<number>();
     const paginate = (pageNumber:number) => {
         setCurrentPage(pageNumber);
      };
 
     function wrap() {
         return new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    const displayUpdate = async (e:any) =>{
+        
+        let postIdVal = e.value;
+        // setPostId(postIdVal);
+        Service.getSingleRESTPost(currUser.userId, postIdVal).then((result)=> {
+            // console.log(result.data)
+            setPostInfos(result.data.posts)
+           
+        });
+        
+        setHidden((prevState)=>({
+            ...prevState,
+            [postIdVal]:true
+        }))
     }
 
     //& delete selected GoREST post by passing post id
@@ -56,6 +74,14 @@ const GoRESTPost = (currUser:any) => {
             setModalVisible(true);
         });
     }
+    
+    const handleHidden = (postId:any) => {
+        setHidden ((prevState)=>({
+            ...prevState,
+            [postId]:false
+        }))
+    }
+    
 
     const getMessage = () => {
         const status = isError ? `Error: ` : `Success: `;
@@ -68,19 +94,37 @@ const GoRESTPost = (currUser:any) => {
         Service.getRESTPost(currUser.userId).then((result)=> {
             // console.log(result.data)
             setPostInfos(result.data.posts)
+
+            const response = result.data.posts;
+
+            response.forEach((res:any)=> {
+                const postId = res.id.toString();
+                
+                setHidden ((prevState)=>({
+                    ...prevState,
+                    [postId]:false
+                }))
+            })
             
             setHasLoaded(true);
         });
+        
         
     }, []);
 
     return(
         hasLoaded ? <div>
+            
+            <div>
             {postInfos.length > 0 && (
                 <div className="m-10 drop-shadow bg-lime-200 p-4 grid grid-cols-1 gap-y-5">
                     {postInfos && 
                     currentPosts.map((post, indexP) =>(
-                        <div key={indexP} className="text-lg font-semibold flex flex-row justify-between items-center gap-x-2">
+                        <div key={indexP} >
+                            {hide![post.id] ? 
+                                <GoRESTUpdate postI={post} handleHidden={handleHidden}/>:
+                            <div className="text-lg font-semibold flex flex-row justify-between items-center gap-x-2">
+                            
                             <div>
                                {post.title} 
                             </div>
@@ -88,14 +132,22 @@ const GoRESTPost = (currUser:any) => {
                                 {post.body}
                             </div>
                             
+                            <button type="button" className="bg-blue-200 w-fit h-fit p-4 hover:bg-blue-400 rounded" 
+                                    value={post.id} onClick={e => displayUpdate(e.target)}>Update
+                                    </button>
                             <button type="button" className="bg-red-200 w-fit h-fit p-4 hover:bg-red-400 rounded" 
                                     value={post.id} onClick={e => handleDelete(e.target)}>Delete
                                     </button>
+                            </div>
+                    }
                         </div>
                     ))
                     }
                 </div>
             )}
+            </div>
+            
+            
             <Paginate
                   postsPerPage={postsPerPage}
                   totalPosts={postInfos.length}
