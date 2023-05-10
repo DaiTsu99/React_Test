@@ -80,6 +80,24 @@ const GoRESTPost = (currUser:any) => {
             ...prevState,
             [postId]:false
         }))
+
+        Service.getRESTPost(currUser.userId).then((result)=> {
+            // console.log(result.data)
+            setPostInfos(result.data.posts)
+
+            const response = result.data.posts;
+
+            response.forEach((res:any)=> {
+                const postId = res.id.toString();
+                
+                setHidden ((prevState)=>({
+                    ...prevState,
+                    [postId]:false
+                }))
+            })
+            
+            setHasLoaded(true);
+        });
     }
     
 
