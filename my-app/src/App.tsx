@@ -6,6 +6,7 @@ import Homepage from './Components/Homepage'
 import JSONPost from './Components/JSONPost'
 import Weather from './Components/WeatherMaster'
 import GoREST from './Components/GoREST'
+import AWS_Raspberry from './Components/AWS_Raspberry';
 import './App.css';
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/Post" element={<JSONPost/>} />
         <Route path="/Weather" element={<Weather/>} />
         <Route path="/GoREST" element={<GoREST/>} />
+        <Route path="/AWS/Raspberry" element={<AWS_Raspberry/>} />
       </Routes>
       </BrowserRouter>
     </div>

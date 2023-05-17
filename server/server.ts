@@ -6,6 +6,7 @@ import sequelize from './database' ;
 
 import Post from './models/Post';
 
+import * as AWSDynamo from './aws'
 import * as GoRESTcontroller from './controllers/goREST.controller'
 
 const app = express()
@@ -16,6 +17,10 @@ app.use(express.json())
 
 sequelize.sync();
 
+app.get("/getDynamo", AWSDynamo.getData)
+app.post("/getFilteredTimeDynamoFrom", AWSDynamo.getFilteredDataByTimeFrom)
+app.post("/getFilteredTimeDynamoTo", AWSDynamo.getFilteredDataByTimeTo)
+app.post("/getFilteredTimeDynamoFromAndTo", AWSDynamo.getFilteredDataByTimeFromAndTo)
 app.post("/processData", GoRESTcontroller.processData);
 app.post("/retrieveRESTPost",GoRESTcontroller.retrieveRESTPost);
 app.post("/deleteRESTPost", GoRESTcontroller.deleteRESTPost);
