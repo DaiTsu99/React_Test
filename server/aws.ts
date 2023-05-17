@@ -1,10 +1,6 @@
 import express, { Request, Response }  from 'express'
 import AWS from 'aws-sdk';
 import config from './config';
-<<<<<<< HEAD
-=======
-import uuid from 'uuid';
->>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
 
 
 const getData = function (req: Request, res: Response) {
@@ -51,19 +47,11 @@ const getFilteredDataByTimeFrom = function (req: Request, res: Response) {
         ExpressionAttributeNames: { "#timestamp": "timestamp" },
         ExpressionAttributeValues: {
             ':fromTime':parseInt(fromTime)
-<<<<<<< HEAD
 
     } 
     }
 
 
-=======
-            
-    } 
-    }
-    
-    
->>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
 
     docClient.scan(params, function (err, data) {
 
@@ -99,13 +87,8 @@ const getFilteredDataByTimeTo = function (req: Request, res: Response) {
             ':toTime':parseInt(toTime)
         }
     }
-<<<<<<< HEAD
 
 
-=======
-    
-    
->>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
 
     docClient.scan(params, function (err, data) {
 
@@ -143,13 +126,8 @@ const getFilteredDataByTimeFromAndTo = function (req: Request, res: Response) {
             ':toTime':parseInt(toTime)
         }
     }
-<<<<<<< HEAD
 
 
-=======
-    
-    
->>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
 
     docClient.scan(params, function (err, data) {
 
