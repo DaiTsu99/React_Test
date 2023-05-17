@@ -3,7 +3,7 @@ import axios from 'axios';
 import cors from 'cors'
 
 import sequelize from './database' ;
-
+import * as AWSDynamo from './aws'
 import Post from './models/Post';
 
 import * as AWSDynamo from './aws'

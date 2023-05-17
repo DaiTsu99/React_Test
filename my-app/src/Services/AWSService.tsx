@@ -9,7 +9,11 @@ const getFilteredRaspberryTime = (fromTime:string, toTime:string) => {
     console.log(toTime)
     let formData = new FormData();
     // // console.log(userId);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
     formData.append("fromTime", fromTime)  
     formData.append("toTime", toTime)
 
@@ -32,9 +36,15 @@ const getFilteredRaspberryTime = (fromTime:string, toTime:string) => {
         },
         }); 
     } 
+<<<<<<< HEAD
 
 
 
+=======
+    
+
+    
+>>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
 }
 
 const AWSService = {
