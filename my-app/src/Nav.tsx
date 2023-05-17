@@ -31,6 +31,12 @@ const Nav = () => {
                         }>GoRest API
                         </NavLink>
                     </li>
+                    <li className="list">
+                        <NavLink to="/AWS/Raspberry" className={isActive =>
+                            !isActive.isActive ? "unselectedPage" : "selectedPage"
+                        }>Raspberry IOT
+                        </NavLink>
+                    </li>
                 </ul>
         </div>
     );

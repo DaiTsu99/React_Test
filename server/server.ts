@@ -3,7 +3,7 @@ import axios from 'axios';
 import cors from 'cors'
 
 import sequelize from './database' ;
-
+import * as AWSDynamo from './aws'
 import Post from './models/Post';
 
 import * as GoRESTcontroller from './controllers/goREST.controller'
@@ -16,6 +16,10 @@ app.use(express.json())
 
 sequelize.sync();
 
+app.get("/getDynamo", AWSDynamo.getData)
+app.post("/getFilteredTimeDynamoFrom", AWSDynamo.getFilteredDataByTimeFrom)
+app.post("/getFilteredTimeDynamoTo", AWSDynamo.getFilteredDataByTimeTo)
+app.post("/getFilteredTimeDynamoFromAndTo", AWSDynamo.getFilteredDataByTimeFromAndTo)
 app.post("/processData", GoRESTcontroller.processData);
 app.post("/retrieveRESTPost",GoRESTcontroller.retrieveRESTPost);
 app.post("/deleteRESTPost", GoRESTcontroller.deleteRESTPost);
