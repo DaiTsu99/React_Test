@@ -9,8 +9,13 @@ const getData = function (req: Request, res: Response) {
     const docClient = new AWS.DynamoDB.DocumentClient();
 
     const params = {
-        TableName: config.aws_table_name
-    };
+        TableName: config.aws_table_name,
+        FilterExpression : "#timestamp >= :fromTime",
+        ExpressionAttributeNames: { "#timestamp": "timestamp" },
+        ExpressionAttributeValues: {
+            ':fromTime':1684204380000
+        }
+    }
 
     docClient.scan(params, function (err, data) {
 

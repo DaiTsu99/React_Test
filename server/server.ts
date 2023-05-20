@@ -4,6 +4,7 @@ import cors from 'cors'
 
 import sequelize from './database' ;
 import Post from './models/Post';
+import Raspberry from './models/Raspberry'
 
 import * as AWSDynamo from './aws'
 import * as GoRESTcontroller from './controllers/goREST.controller'
@@ -12,7 +13,8 @@ const app = express()
 
 app.use(cors());
 app.use(express.urlencoded({extended: true})); 
-app.use(express.json())
+app.use(express.json({limit: '50mb'}));
+
 
 sequelize.sync();
 
@@ -25,6 +27,61 @@ app.post("/retrieveRESTPost",GoRESTcontroller.retrieveRESTPost);
 app.post("/deleteRESTPost", GoRESTcontroller.deleteRESTPost);
 app.post("/retrieveSingleRESTPost", GoRESTcontroller.retrieveSingleRESTPost);
 app.post("/updateRESTPost", GoRESTcontroller.updateRESTPost);
+
+app.post('/cloneDynamo', async (req:Request, res:Response)=> {
+  try{
+    console.log(req.body.raspData[0]);
+
+    const raspData = req.body.raspData;
+
+    raspData.forEach(async (raspberry:any)=> {
+      const rasp = JSON.parse(raspberry)
+      console.log(rasp.timestamp)
+      await Raspberry.findOrCreate({
+        where: { timestamp: rasp.timestamp },
+        defaults: { 
+          client_id: rasp.client_id,
+          timestamp: rasp.timestamp,
+          payload:rasp.payload
+         },
+      })
+    })
+
+    res.status(200).json({message:"success"})
+  } catch (error:any) {
+
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+app.get('/getDynamoClone', (req: Request, res: Response) => {
+    
+  Raspberry.findAll({
+      attributes: ['client_id','timestamp', 'payload']
+    })
+  .then(dbRasp => {
+      const arrRasp = JSON.parse(JSON.stringify(dbRasp))
+      let arrReturn:any[] = []
+
+      arrRasp.forEach((arr:any)=> {
+        // console.log(JSON.parse(arr.payload))
+        arrReturn.push({
+          client_id: arr.client_id,
+          timestamp: arr.timestamp,
+          payload: JSON.parse(arr.payload)
+        })
+      })
+      const arrFinal = arrReturn.sort(function(a:any, b:any) { return a.timestamp - b.timestamp })
+
+      res.status(200).send(arrFinal)
+  })
+  .catch(err => {
+      console.log('error', err);
+  });
+});
 
 //& create new post in database
 app.post('/uploadPost', async (req: Request, res: Response) => {

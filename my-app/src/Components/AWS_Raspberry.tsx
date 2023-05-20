@@ -5,28 +5,25 @@ import Service from "../Services/AWSService";
 import Pagination from 'rc-pagination';
 import './../Pagination.css'
 import styles from '../Styles'
-import Paginate from '../Paginate';
 import { error } from "console";
 
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+import LineChart from "./Chart/AWS_Chart";
 
 const AWS_Raspberry = () => {
     
+    const [iotInfos, setIotInfos] = useState<{
+                                            
+                                            payload :{temperature:number, humidity:number, pressure:number },
+                                            client_id:string, 
+                                            timestamp:number
+                                        }[]>([]);
     // const [iotInfos, setIotInfos] = useState<{
     //                                         client_id:string, 
     //                                         payload :{humidity:number, pressure:number, temperature:number},
     //                                         timestamp:number
-    //                                     }[]>([{client_id : "basicPubSub",
-    //                                     payload : {
-    //                                         humidity: 49.01,
-    //                                         pressure: 1007.64,
-    //                                         temperature:23.91
-    //                                     },
-    //                                     timestamp : 1684199003745}]);
-    const [iotInfos, setIotInfos] = useState<{
-                                            client_id:string, 
-                                            payload :{humidity:number, pressure:number, temperature:number},
-                                            timestamp:number
-                                        }[]>([]);
+    //                                     }[]>([]);
     const [message, setMessage] = useState<string>("");
     const [isError, setIsError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
@@ -80,9 +77,31 @@ const AWS_Raspberry = () => {
     const [minute2, setMinute2] = useState<string>("0");
     const [second2, setSecond2] = useState<string>("0");
     
-    // const paginate = (pageNumber:number) => {
-    //     setCurrentPage(pageNumber);
-    //  };
+    const [chartData, setChartData] = useState<{
+        labels: string[], 
+        datasets: 
+          {
+            type:string,
+            label: string,
+            data: number[],
+            backgroundColor: string[],
+            yAxisID: string,
+            borderColor: string,
+            borderWidth: number
+          }[]
+      }>();
+
+      const [chartData2, setChartData2] = useState<{
+        labels: string[], 
+        datasets: 
+          {
+            label: string,
+            data: number[],
+            backgroundColor: string[],
+            borderColor: string,
+            borderWidth: number
+          }[]
+      }>();
 
     function wrap() {
         return new Promise((resolve) => setTimeout(resolve, 2000));
@@ -143,22 +162,77 @@ const AWS_Raspberry = () => {
       }
     
     useEffect(() => {
-        // console.log(currUser)
+        
         //& retrieve all data
-        // iotInfos.push(
-        //     {client_id : "basicPubSub",
-        //     payload : {
-        //         humidity: 48.84,
-        //         pressure: 1007.59,
-        //         temperature:23.86
-        //     },
-        //     timestamp : 1684199084742}
-        // )
-        Service.getRaspberry().then((result)=> {
-            console.log(result.data.iot)
-            setIotInfos(result.data.iot)
+        // sampleData.forEach((item:any)=> {
+        //     if(!iotInfos.includes(item)){
+        //         iotInfos.push(item) 
+        //     }
+        // })
+        // console.log(iotInfos)
 
-            
+        // Service.getRaspberry().then((result)=> {
+            // console.log(result.data.iot)
+            // setIotInfos(result.data.iot)
+        Service.getRaspberryClone().then((result)=> {
+            console.log(result.data)
+            setIotInfos(result.data)
+
+            // const response = result.data.iot;
+
+            // Service.copyRaspberry(response).then((result)=>{
+            //     console.log(result.data.message)
+            // })
+
+            setChartData({
+                labels: result.data.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
+                datasets: [
+                {
+                    type: "bar",
+                    label: "Humidity ",
+                    data: result.data.map((dataI:any) => dataI.payload.humidity),
+                    backgroundColor: [
+                    "#FFFF"
+                    ],
+                    yAxisID: 'y-axis-1',
+                    borderColor: "black",
+                    borderWidth: 2
+                },
+                {
+                    type: "line",
+                    label: "Temperature ",
+                    data: result.data.map((dataI:any) => dataI.payload.temperature),
+                    backgroundColor: [
+                      "rgba(75,192,192,1)",
+                      "#50AF95",
+                      "#f3ba2f",
+                      "#f3ba2f",
+                      "#2a71d0"
+                    ],
+                    yAxisID: 'y-axis-2',
+                    borderColor: "black",
+                    borderWidth: 2
+                  }
+                ]
+            })
+            // setChartData2({
+            //     labels: result.data.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
+            //     datasets: [
+            //       {
+            //         label: "Temperature ",
+            //         data: result.data.map((dataI:any) => dataI.payload.temperature),
+            //         backgroundColor: [
+            //           "rgba(75,192,192,1)",
+            //           "#50AF95",
+            //           "#f3ba2f",
+            //           "#f3ba2f",
+            //           "#2a71d0"
+            //         ],
+            //         borderColor: "black",
+            //         borderWidth: 2
+            //       }
+            //     ]
+            //   })
             
             setHasLoaded(true);
         });
@@ -168,16 +242,22 @@ const AWS_Raspberry = () => {
     }, []);
 
     return(
-        hasLoaded ? <div>
-            {/* <div className="p-2 m-2">
+        hasLoaded ? <div className="font-[Poppins] p-10 h-full bg-cover
+                                bg-gradient-to-b from-emerald-300 from-30% via-emerald-400 to-90% to-white">
+            
+            
+            <LineChart
+                chartData={chartData} optionYmin={20} optionYmax={30} optionY1min={10} optionY1max={100} 
+                stepSize={5} textTitle="Humidity & Temperature"/>
+
+            <div className="p-2 m-2">
                 Set Rows Per Page | 1ページあたりの行数を設定する
                 <input className='border border-gray-200 p-2 w-full rounded duration-700 ease-in-out'
                         type="number"
-                    name="postPerPage" id="postPerPage" onChange={e => setPostsPerPage(e.target.valueAsNumber)}
-                    value={postsPerPage}
-                    placeholder="Enter posts per page here"/>
-            </div> */}
-            
+                    name="perPage" id="perPage" onChange={e => setSize(e.target.valueAsNumber)}
+                    value={size}
+                    placeholder="Enter rows per page here"/>
+            </div>
 
             <div className="flex flex-row justify-center items-center gap-x-10 p-2">
 
@@ -322,9 +402,9 @@ const AWS_Raspberry = () => {
                             <tr>
                                 <th className="border-b-4 border-black">ClientId</th>
                                 <th className="border-b-4 border-black">TimeStamp</th>
-                                <th className="border-b-4 border-black">Humidity</th>
-                                <th className="border-b-4 border-black">Temperature</th>
-                                <th className="border-b-4 border-black">Pressure</th>
+                                <th className="border-b-4 border-black">Humidity% | 湿度 %</th>
+                                <th className="border-b-4 border-black">Temperature &deg;C | 気温 &deg;C</th>
+                                <th className="border-b-4 border-black">Pressure | 大気圧</th>
                             </tr>
                             
                         </thead>

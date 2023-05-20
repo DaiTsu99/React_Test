@@ -4,16 +4,29 @@ const getRaspberry = () => {
     return http.get("/getDynamo");
 }
 
+const getRaspberryClone = () => {
+    return http.get("/getDynamoClone");
+}
+
+const copyRaspberry = (res:any) => {
+    console.log(res)
+    let formData = new FormData();
+    res.forEach((item:any) => formData.append("raspData[]", JSON.stringify(item)))
+
+    // console.log(formData.getAll("raspData[]"))
+
+    return http.post("/cloneDynamo", formData, {
+        headers: {
+        "Content-Type": "application/json",
+        },
+    }); 
+}
+
 const getFilteredRaspberryTime = (fromTime:string, toTime:string) => {
     console.log(fromTime)
     console.log(toTime)
     let formData = new FormData();
     // // console.log(userId);
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
     formData.append("fromTime", fromTime)  
     formData.append("toTime", toTime)
 
@@ -36,20 +49,16 @@ const getFilteredRaspberryTime = (fromTime:string, toTime:string) => {
         },
         }); 
     } 
-<<<<<<< HEAD
 
 
 
-=======
-    
-
-    
->>>>>>> 58150877d069e1a428f04e5897081764cb800bd1
 }
 
 const AWSService = {
     getRaspberry,
-    getFilteredRaspberryTime
+    getFilteredRaspberryTime,
+    copyRaspberry,
+    getRaspberryClone
 }
 
 export default AWSService
