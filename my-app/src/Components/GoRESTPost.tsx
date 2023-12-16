@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Alert, Pressable, View, Text, StyleSheet, Modal } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { Alert, Pressable, View, Text,  Modal } from 'react-native';
 import Service from "../Services/GoRESTService";
 
 import styles from '../Styles'
 import Paginate from '../Paginate';
-import { error } from "console";
+// import { error } from "console";
 import GoRESTUpdate from "./GoRESTUpdate";
 
 const GoRESTPost = (currUser:any) => {
@@ -134,7 +134,7 @@ const GoRESTPost = (currUser:any) => {
         hasLoaded ? <div>
             
             <div>
-            {postInfos.length > 0 && (
+            {postInfos.length > 0 ? (
                 <div className="m-10 drop-shadow bg-lime-200 p-4 grid grid-cols-1 gap-y-5">
                     {postInfos && 
                     currentPosts.map((post, indexP) =>(
@@ -162,7 +162,9 @@ const GoRESTPost = (currUser:any) => {
                     ))
                     }
                 </div>
-            )}
+            ):
+            <div>No Posts Under This User</div>
+            }
             </div>
             
             

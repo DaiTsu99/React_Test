@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 
 import 'moment/locale/ja';
@@ -8,7 +8,11 @@ const refresh = () => {
     window.location.reload();
 }
 
-const WeatherDataDisplay = ({weatherData,language}:{weatherData:any, language:any}) => {
+const WeatherDataDisplay = ({weatherData,language,fetchData, zoneName}:{weatherData:any, language:any, fetchData:any, zoneName:string}) => {
+
+    const [sunriseTime, setSunriseTime] = useState<string>();
+    const [sunsetTime, setSunsetTime] = useState<string>();
+
     const momentFormatDay = () => {
         if (language == "en"){
             const mDay = moment().locale('en');
@@ -34,13 +38,32 @@ const WeatherDataDisplay = ({weatherData,language}:{weatherData:any, language:an
             return dateText2;
         }
     }
+
+    const localizedSunTimes = (zoneName: string) => {
+        
+        const sunriseTimestamp = weatherData.sys.sunrise * 1000;
+        const sunsetTimestamp = weatherData.sys.sunset * 1000;
+
+        const sunriseDate = new Date(sunriseTimestamp);
+        const formattedSunrise = sunriseDate.toLocaleTimeString('en-IN', { timeZone: zoneName }) + " " + zoneName;
+        setSunriseTime(formattedSunrise);
+
+        const sunsetDate = new Date(sunsetTimestamp);
+        const formattedSunset = sunsetDate.toLocaleTimeString('en-IN', { timeZone: zoneName }) + " " + zoneName;
+        setSunsetTime(formattedSunset);
+    }
+
+    useEffect(() => {
+      
+        localizedSunTimes(zoneName);   
+    }, [weatherData, zoneName]);
     
     return(
-    <div className="h-screen flex justify-center items-center">
+    <div className="mt-10 flex justify-center items-center">
         <div className="w-3/4 h-fit bg-gradient-to-b from-lime-400 from-20% to-green-800 to-80% drop-shadow-md rounded-xl p-2">
             <div className="flex flex-row justify-between">
                 <div className="font-extralight text-xl text-white flex flex-row items-end">{language=="en" ? "City Name" : (language=="ja"? "市名":"")}<div className="ml-4 text-4xl">{weatherData.name}</div></div>
-                <button onClick={refresh} >
+                <button onClick={fetchData} >
                     <svg color="white" width="30" height="30" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/> <path d="M16.5829 9.66667C15.8095 8.09697 14.043 7 11.9876 7C9.38854 7 7.25148 8.75408 7 11" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/> <path d="M14.4939 9.72222H16.4001C16.7315 9.72222 17.0001 9.45359 17.0001 9.12222V7.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/> <path d="M7.41707 13.6667C8.19054 15.6288 9.95698 17 12.0124 17C14.6115 17 16.7485 14.8074 17 12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/> <path d="M9.5061 13.6222H7.59992C7.26855 13.6222 6.99992 13.8909 6.99992 14.2222V16.4" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/> </svg>
                 </button>
             </div>
@@ -68,13 +91,13 @@ const WeatherDataDisplay = ({weatherData,language}:{weatherData:any, language:an
                     </div>
                     
                     <div className="text-3xl ml-4">
-                        {new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString('en-IN')}  
+                        {sunriseTime}
                     </div>
                     
                 </div>
                 <div className="font-extralight text-xl text-white flex flex-row items-end">
                     <div className="text-3xl mr-4">
-                    {new Date(weatherData.sys.sunset * 1000).toLocaleTimeString('en-IN')}
+                        {sunsetTime}
                     </div>
                     <div className="flex flex-col justify-center">
                         <svg className="svg-icon" color="white" width="50" height="50" viewBox="0 0 20 20">
@@ -91,7 +114,7 @@ const WeatherDataDisplay = ({weatherData,language}:{weatherData:any, language:an
             <div className="mt-4 font-extralight text-2xl text-white flex flex-row justify-between border-t-4 border-black">
                 <div> 
                     {language=="en" ? "As of " : (language=="ja"? "有効":"")}
-                    『{moment().format('LTS')}』 
+                    『{moment().format('LTS')} JST』 
                 </div>
                 <div className="  flex flex-row justify-end gap-x-4 italic">
                     <div>{momentFormatDay()},</div>

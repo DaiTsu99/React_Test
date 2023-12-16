@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Alert, Pressable, View, Text, StyleSheet, Modal } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { Alert, Pressable, View, Text, Modal } from 'react-native';
 import Service from "../Services/AWSService";
 
 import Pagination from 'rc-pagination';
 import './../Pagination.css'
 import styles from '../Styles'
-import { error } from "console";
+// import { error } from "console";
 
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
@@ -112,17 +112,17 @@ const AWS_Raspberry = () => {
     }
     
     const filterTime = () => {
-        const day1NullorZero = (day1 != null && day1 != "0")
-        const day2NullorZero = (day2 != null && day2 != "0")
-        const month1NullorZero = (month1 != null && month1 != "0")
-        const month2NullorZero = (month2 != null && month2 != "0")
-        const year1NullorZero = (year1 != null && year1 != "0")
-        const year2NullorZero = (year2 != null && year2 != "0")
+        const day1NullorZero = (day1 !== null && day1 !== "0")
+        const day2NullorZero = (day2 !== null && day2 !== "0")
+        const month1NullorZero = (month1 !== null && month1 !== "0")
+        const month2NullorZero = (month2 !== null && month2 !== "0")
+        const year1NullorZero = (year1 !== null && year1 !== "0")
+        const year2NullorZero = (year2 !== null && year2 !== "0")
 
         if((day1NullorZero && month1NullorZero && year1NullorZero && 
-            hour1 != null && minute1 != null && second1 != null ) && 
+            hour1 !== null && minute1 !== null && second1 !== null ) && 
             (day2NullorZero && month2NullorZero && year2NullorZero && 
-            hour2 != null && minute2 != null && second2 != null )){
+            hour2 !== null && minute2 !== null && second2 !== null )){
                 const timeString1 = year1 + "/" + month1 + "/" + day1 + " " + hour1 + ":" + minute1 + ":" + second1 + " GMT+9:00"
                 const timeString2 = year2 + "/" + month2 + "/" + day2 + " " + hour2 + ":" + minute2 + ":" + second2 + " GMT+9:00"
 
@@ -132,22 +132,106 @@ const AWS_Raspberry = () => {
                 Service.getFilteredRaspberryTime(fromTime.getTime().toString(), toTime.getTime().toString())!.then((result) => {
                     console.log(result.data)
                     setIotInfos(result.data.iot)
+
+                    setChartData({
+                        labels: result.data.iot.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
+                        datasets: [
+                        {
+                            type: "bar",
+                            label: "Humidity 湿度",
+                            data: result.data.iot.map((dataI:any) => dataI.payload.humidity),
+                            backgroundColor: [
+                            "#FFFF"
+                            ],
+                            yAxisID: 'y-axis-1',
+                            borderColor: "black",
+                            borderWidth: 2
+                        },
+                        {
+                            type: "line",
+                            label: "Temperature 気温",
+                            data: result.data.iot.map((dataI:any) => dataI.payload.temperature),
+                            backgroundColor: [
+                            "#0000FF"
+                            ],
+                            yAxisID: 'y-axis-2',
+                            borderColor: "blue",
+                            borderWidth: 2
+                          }
+                        ]
+                    })
                 });
         } else if(day1NullorZero && month1NullorZero && year1NullorZero && 
-            hour1 != null && minute1 != null && second1 != null ){
+            hour1 !== null && minute1 !== null && second1 !== null ){
             const timeString = year1 + "/" + month1 + "/" + day1 + " " + hour1 + ":" + minute1 + ":" + second1 + " GMT+9:00"
             const fromTime = new Date(timeString)
             Service.getFilteredRaspberryTime(fromTime.getTime().toString(), "None")!.then((result) => {
                 console.log(result.data)    
                 setIotInfos(result.data.iot)
+
+                setChartData({
+                    labels: result.data.iot.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
+                    datasets: [
+                    {
+                        type: "bar",
+                        label: "Humidity 湿度",
+                        data: result.data.iot.map((dataI:any) => dataI.payload.humidity),
+                        backgroundColor: [
+                        "#FFFF"
+                        ],
+                        yAxisID: 'y-axis-1',
+                        borderColor: "black",
+                        borderWidth: 2
+                    },
+                    {
+                        type: "line",
+                        label: "Temperature 気温",
+                        data: result.data.iot.map((dataI:any) => dataI.payload.temperature),
+                        backgroundColor: [
+                        "#0000FF"
+                        ],
+                        yAxisID: 'y-axis-2',
+                        borderColor: "blue",
+                        borderWidth: 2
+                      }
+                    ]
+                })
             });
         } else if(day2NullorZero && month2NullorZero && year2NullorZero && 
-            hour2 != null && minute2 != null && second2 != null ){
+            hour2 !== null && minute2 !== null && second2 !== null ){
             const timeString = year2 + "/" + month2 + "/" + day2 + " " + hour2 + ":" + minute2 + ":" + second2 + " GMT+9:00"
             const toTime = new Date(timeString)
             Service.getFilteredRaspberryTime("None", toTime.getTime().toString())!.then((result) => {
                 console.log(result.data)    
                 setIotInfos(result.data.iot)
+
+                setChartData({
+                    labels: result.data.iot.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
+                    datasets: [
+                    {
+                        type: "bar",
+                        label: "Humidity 湿度",
+                        data: result.data.iot.map((dataI:any) => dataI.payload.humidity),
+                        backgroundColor: [
+                        "#FFFF"
+                        ],
+                        yAxisID: 'y-axis-1',
+                        borderColor: "black",
+                        borderWidth: 2
+                    },
+                    {
+                        type: "line",
+                        label: "Temperature 気温",
+                        data: result.data.iot.map((dataI:any) => dataI.payload.temperature),
+                        backgroundColor: [
+                        "#0000FF"
+                        ],
+                        yAxisID: 'y-axis-2',
+                        borderColor: "blue",
+                        borderWidth: 2
+                      }
+                    ]
+                })
             });
         } else {
             console.log("Not Found")
@@ -172,11 +256,11 @@ const AWS_Raspberry = () => {
         // console.log(iotInfos)
 
         // Service.getRaspberry().then((result)=> {
-            // console.log(result.data.iot)
-            // setIotInfos(result.data.iot)
+        //     console.log(result.data.iot)
+        //     setIotInfos(result.data.iot)
         Service.getRaspberryClone().then((result)=> {
-            console.log(result.data)
-            setIotInfos(result.data)
+            console.log(result.data.iot)
+            setIotInfos(result.data.iot)
 
             // const response = result.data.iot;
 
@@ -185,12 +269,12 @@ const AWS_Raspberry = () => {
             // })
 
             setChartData({
-                labels: result.data.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
+                labels: result.data.iot.map((dataI:any) => new Date(dataI.timestamp).toLocaleString('ja-JP', { timeZone: 'Japan' })), 
                 datasets: [
                 {
                     type: "bar",
-                    label: "Humidity ",
-                    data: result.data.map((dataI:any) => dataI.payload.humidity),
+                    label: "Humidity 湿度",
+                    data: result.data.iot.map((dataI:any) => dataI.payload.humidity),
                     backgroundColor: [
                     "#FFFF"
                     ],
@@ -200,17 +284,18 @@ const AWS_Raspberry = () => {
                 },
                 {
                     type: "line",
-                    label: "Temperature ",
-                    data: result.data.map((dataI:any) => dataI.payload.temperature),
+                    label: "Temperature 気温",
+                    data: result.data.iot.map((dataI:any) => dataI.payload.temperature),
                     backgroundColor: [
-                      "rgba(75,192,192,1)",
-                      "#50AF95",
-                      "#f3ba2f",
-                      "#f3ba2f",
-                      "#2a71d0"
+                    //   "rgba(75,192,192,1)",
+                    //   "#50AF95",
+                    //   "#f3ba2f",
+                    //   "#f3ba2f",
+                    //   "#2a71d0"
+                    "#0000FF"
                     ],
                     yAxisID: 'y-axis-2',
-                    borderColor: "black",
+                    borderColor: "blue",
                     borderWidth: 2
                   }
                 ]

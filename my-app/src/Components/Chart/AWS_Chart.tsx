@@ -19,7 +19,7 @@ const LineChart: React.FC<PropsFunction> = ({chartData,optionYmin, optionYmax, o
     // console.log(chartData);
     // console.log(chartData.labels);
 
-    const [perPage, setPerPage] = useState(20);
+    const [perPage, setPerPage] = useState(500);
     const [size, setSize] = useState(perPage);
     const [current, setCurrent] = useState(1);
 
@@ -76,17 +76,16 @@ const LineChart: React.FC<PropsFunction> = ({chartData,optionYmin, optionYmax, o
 
     return (
         <div className="chart-container flex justify-center rounded-md drop-shadow bg-lime-300 p-2">
-          <div className="w-5/6 flex flex-col">
+          <div className="w-5/6 flex flex-col items-center">
             {/* <h2 style={{ textAlign: "center" }}>Line Chart</h2> */}
             <Chart
             className="mb-6"
-            height="900"
+            height="600"
             width="1078"
             data={getData1(current, size)}
             options={{
               responsive: true,
-              barPercentage: 0.2,
-              categoryPercentage: 2,
+              barPercentage: 0.5,
               interaction: {
                 mode: 'index',
                 intersect: false,
@@ -98,9 +97,13 @@ const LineChart: React.FC<PropsFunction> = ({chartData,optionYmin, optionYmax, o
                 },
                 legend: {
                   display: true
-                }
+                },
+                
               },
               scales: {
+                x: {
+                  display:false
+                },
                 y: {
                   min: optionYmin,
                   max: optionYmax,
@@ -114,7 +117,7 @@ const LineChart: React.FC<PropsFunction> = ({chartData,optionYmin, optionYmax, o
                   },
                   title: {
                   display: true,
-                  text: 'Temperature °C',
+                  text: 'Temperature 気温(°C)',
                   },
                 },
                 y1: {
@@ -129,7 +132,7 @@ const LineChart: React.FC<PropsFunction> = ({chartData,optionYmin, optionYmax, o
                   },
                   title: {
                   display: true,
-                  text: 'Humidity %',
+                  text: 'Humidity 湿度(%)',
                 
               },
                 },

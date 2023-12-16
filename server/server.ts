@@ -76,7 +76,7 @@ app.get('/getDynamoClone', (req: Request, res: Response) => {
       })
       const arrFinal = arrReturn.sort(function(a:any, b:any) { return a.timestamp - b.timestamp })
 
-      res.status(200).send(arrFinal)
+      res.status(200).send({iot:arrFinal})
   })
   .catch(err => {
       console.log('error', err);
@@ -139,6 +139,32 @@ app.get('/retrievePost', (req: Request, res: Response) => {
         .catch(err => {
             console.log('error', err);
         });
+});
+
+//& update selected post in database
+app.post('/updatePost', async (req: Request, res: Response) => {
+  try{
+    console.log(req.body)
+    let id = req.body.id;
+    let message = req.body.text;
+  
+    const updatedPost = await Post.update(
+      { message:message }, // Fields to update
+      { where: { id:id } } // Condition for the update
+    );
+
+  res.status(201).json({
+    status: "success",
+    message:"successfully updated",
+    data: {
+      updatedPost,
+    },
+  });
+
+  }  catch(err) {
+      console.log('error', err);
+      res.status(500).json({ error: err|| 'Internal server error' });
+  };
 });
 
 //& delete selected post in database

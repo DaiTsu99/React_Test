@@ -13,7 +13,8 @@ const getData = function (req: Request, res: Response) {
         FilterExpression : "#timestamp >= :fromTime",
         ExpressionAttributeNames: { "#timestamp": "timestamp" },
         ExpressionAttributeValues: {
-            ':fromTime':1684204380000
+            // ':fromTime':1684204380000
+            ':fromTime': 1684353297000
         }
     }
 

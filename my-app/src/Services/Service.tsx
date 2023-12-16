@@ -30,6 +30,24 @@ const getPost = () => {
     return http.get("/retrievePost");
 };
 
+//& update selected post in database
+const updatePost = (id:number, message:string) => {
+
+    let formData = new FormData();
+    let postId ="" + id
+    formData.append("id", postId);
+    formData.append("text", message);
+    
+    // console.log(...formData);
+    // console.log("here");
+
+    return http.post("/updatePost", formData, {
+        headers: {
+        "Content-Type": "application/json",
+        },
+    });
+}
+
 //& delete selected post in database
 const deletePost = (id:number) => {
 
@@ -51,6 +69,7 @@ const Service = {
     getString,
     postMessage,
     getPost,
+    updatePost,
     deletePost
 }
 

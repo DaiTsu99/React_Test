@@ -21,6 +21,8 @@ const HomePage = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [height, setHeight] = useState('h-screen');
+
     const handleClick = () => {
       // console.log(postText)
       Service.postMessage(postText).then((result)=> {
@@ -44,8 +46,10 @@ const HomePage = () => {
 
     const viewPost = () => {
       if (!hide) {
+        setHeight("h-screen")
         setHidden(true)
       } else {
+        setHeight("h-full")
         setHidden(false)
       }
       
@@ -69,8 +73,8 @@ const HomePage = () => {
 
   return (
     hasLoaded ? (
-    <div className="flex justify-center bg-sky-200">
-      <div className="container m-5 drop-shadow-md bg-gradient-to-br from-zinc-100 from-10% via-sky-500 via-50% to-white to-80% h-screen p-4 w-3/4" /*style={{ width: "800px" }}*/>
+    <div className="flex justify-center bg-zinc-700">
+      <div className={`container rounded-md m-5 drop-shadow-md bg-gradient-to-br from-sky-400 from-10% via-sky-700 via-50% to-sky-400 to-80% ${height} p-4 w-3/4`} /*style={{ width: "800px" }}*/>
       <div className="text-black text-2xl font-bold font-serif">HomePage</div>
       <div className="mt-5 bg-lime-200 p-4 w-fit">From /api/data:  {text}</div>
       <div className="mt-10">

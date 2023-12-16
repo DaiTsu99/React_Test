@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, Dispatch } from "react";
-import { Alert, Pressable, View, Text, StyleSheet, Modal } from 'react-native';
+import React, { useState, useEffect} from "react";
+import { Alert, Pressable, View, Text, Modal } from 'react-native';
 import Service from "../Services/GoRESTService";
 
 import styles from '../Styles'
-import Paginate from '../Paginate';
-import { error } from "console";
+// import Paginate from '../Paginate';
+// import { error } from "console";
 
   //*Implementation in TypeScript of Passing of Function as Prop to Child Component and Direct Passing of Object as Prop
   //*Able to set parent's state via handler function, object is passed directly 

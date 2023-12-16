@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Pressable, View, Text, StyleSheet, Modal } from 'react-native';
+import { Alert, Pressable, View, Text, Modal } from 'react-native';
 import axios from 'axios';
 
 import GoRESTPost from './GoRESTPost'
@@ -15,6 +15,7 @@ const GoREST = () => {
   const [isError, setIsError] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [hide, setHidden] = useState<{[key:string]:boolean}>();
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [postText,setPostText] = useState<{[key:string]:{title: string, text:string}}>();
 
   //*Implementation in TypeScript of Multi-Object State with Variable Key (Defined upon retrieval)
@@ -103,8 +104,9 @@ const GoREST = () => {
         }
       })
         // console.log(response.data)
-        setData1(response.data)
         
+        setData1(response.data)
+        setHasLoaded(true);
         const result = response.data;
 
         result.forEach((res:any)=> {
@@ -127,7 +129,7 @@ const GoREST = () => {
   }, []);
 
   return (
-    
+      hasLoaded ? 
       <div className="bg-gradient-to-br from-zinc-200 from-10% via-sky-400 via-50% to-white to-80%">
         {/* <button onClick={e=>console.log(postText)}>Test</button> */}
         <div className="text-center font-bold p-4">GoREST API with Bearer Access_Token</div>
@@ -204,6 +206,13 @@ const GoREST = () => {
                         </View>
                 </Modal>
     </div>
+    : <div className="p-10 flex flex-row font-semibold text-xl items-center"> 
+        <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Loading Page
+      </div>
   );
 }
 export default GoREST
